@@ -1,6 +1,6 @@
 upstream backend {
   {% for srv in server %}
-	server {{ srv.host }}; #srv.name
+	server {{ srv.host }}; #{{ srv.name }}
   {% endfor %}
 
 }

@@ -1,0 +1,5 @@
+- name: Setup Landing Page Server
+  hosts: landingpage
+  become: yes
+  roles: 
+    - landingpage 

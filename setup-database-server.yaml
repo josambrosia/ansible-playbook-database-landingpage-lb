@@ -1,0 +1,5 @@
+- name: Setup Database Server
+  hosts: database
+  become: yes
+  roles: 
+    - mariadb-server  

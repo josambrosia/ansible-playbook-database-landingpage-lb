@@ -1,0 +1,56 @@
+- name: install dependency
+  apt: 
+      name: "{{ item }}"
+      state: present
+      update_cache: yes 
+  loop:
+    - nginx
+    - php-fpm
+    - php-mysql 
+    - php-gd
+    - php-zip
+
+- name: Create Directory
+  ansible.builtin.file:
+    path: /var/www/landingpage.domainsaya.id/html 
+    owner: www-data
+    group: www-data
+    state: directory
+
+- name: Delete nginx configuration 
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /etc/nginx/sites-available/default #default config 1
+    - /etc/nginx/sites-enabled/default #default config 2
+
+- name: Copy nginx config 
+  copy: 
+    src: files/default
+    dest: /etc/nginx/sites-available/default
+
+- name: create symlink nginx config 
+  file:
+    src: /etc/nginx/sites-available/default
+    dest: /etc/nginx/sites-enabled/default
+    state: link
+  notify: 
+    - restart nginx
+
+- name: git safe directory
+  shell: git config --global --add safe.directory /var/www/landingpage.domainsaya.id/html 
+
+- name: Download Project dari Repo Kang Adhithia 
+  ansible.builtin.git:
+    repo: https://github.com/adhithia21/sample-php.git #repo config php
+    dest: /var/www/landingpage.domainsaya.id/html 
+    force: yes
+
+
+
+- name: Copy Database Config
+  template:
+    src: template/database.php.j2 
+    dest: /var/www/landingpage.domainsaya.id/html/application/config/database.php   
+    backup: yes

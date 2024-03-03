@@ -1,0 +1,5 @@
+db_host:  34.34.222.55 #database IP
+db_user: db_user
+db_password: db_password #lebih baik di encrypt menggunakan vault dari ansible
+db_name: db_landing_page
+

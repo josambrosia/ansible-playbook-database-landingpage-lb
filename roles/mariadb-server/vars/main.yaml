@@ -1,0 +1,3 @@
+db_name: db_landing_page
+db_user: db_user #insert db_user
+db_password: db_password #gunakan ansible vault utk encrypt  password

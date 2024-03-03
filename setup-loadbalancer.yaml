@@ -1,0 +1,12 @@
+- name: Setup Landing Load Balancer
+  hosts: loadbalancer
+  become: yes
+  vars: 
+    server_name: landingpage.domainsaya.id
+    server: 
+      - name: server 1
+        host: 34.101.169.10 #IP landing page 1
+      - name: server 2
+        host: 34.101.41.163 #IP landing page 2
+  roles: 
+    - loadbalancer 

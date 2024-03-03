@@ -1,0 +1,28 @@
+- name: install dependency
+  apt: 
+      name: "{{ item }}"
+      state: present
+      update_cache: yes #fungsinya untuk menjalankan "apt update"
+  loop:
+    - nginx
+  
+- name: Delete nginx configuration #untuk delete config default bawaan dari nginx (akan ada 2 default file yang akan kita delete)
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /etc/nginx/sites-available/default #default config 1
+    - /etc/nginx/sites-enabled/default #default config 2
+
+- name: Copy nginx config #copy config dari template default.j2 untuk settingan loadblancer
+  template: 
+    src: template/default.j2
+    dest: /etc/nginx/sites-available/default
+
+- name: create symlink nginx config #semacam bikin shortcut file default config yang ada di sites-available ditaruh di sites-enable
+  file:
+    src: /etc/nginx/sites-available/default
+    dest: /etc/nginx/sites-enabled/default
+    state: link
+  notify: 
+    - restart nginx
